@@ -42,6 +42,17 @@
  * @retval false - failed.
  *
  */
+//
+// if we are using software serial we have to create
+// an instance for it
+//
+#ifdef SOFTWARE_SERIAL
+
+SoftwareSerial mySerial(TXPIN, RXPIN);
+
+#endif
+
+
 bool recvRetNumber(uint32_t *number, uint32_t timeout)
 {
     bool ret = false;
@@ -221,9 +232,9 @@ bool nexInit(void)
 {
     bool ret1 = false;
     bool ret2 = false;
-    
     dbSerialBegin(9600);
-    nexSerial.begin(9600);
+    dbSerial.println("Debugger online");
+    nexSerial.begin(NEX_BAUDRATE);
     sendCommand("");
     sendCommand("bkcmd=1");
     ret1 = recvRetCommandFinished();
